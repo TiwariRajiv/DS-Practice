@@ -1,0 +1,42 @@
+//https://leetcode.com/problems/string-to-integer-atoi/
+
+class Solution {
+    public int myAtoi(String s) {
+        String str = s.trim();
+        if (str.length() == 0) {
+            return 0;
+        }
+        int i = 0;
+        if (str.charAt(0) == '-' || str.charAt(0) == '+') {
+            i = 1;
+        }
+        while (i < str.length() && str.charAt(i) == '0') {
+            i++;
+        }        
+        int integer = 0;
+        int last_integer;
+        for (; i<str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i))) {
+                break;
+            } else {
+                int digit = str.charAt(i) - 48;
+                last_integer = integer;
+                integer = integer * 10 + digit;
+                //If integer has -ve value that means integer overflowed to become -ve return max/min based on sign.
+                //For numbers in range of 32 bit integer, last_integer will always be equal to integer/10
+                //If this condition is not satisfied that means integer overflowed to become either -ve handled by first
+                //condition ( integer < 0) or again took +ve value e.g "-9128347233"
+                if (integer < 0 || last_integer != integer/10) {
+                    if (str.charAt(0) == '-') {
+                        return Integer.MIN_VALUE;
+                    }
+                    return Integer.MAX_VALUE;
+                }
+            }
+        }
+        if (str.charAt(0) == '-') {
+            integer *= -1;
+        }
+        return integer;
+    }
+}
