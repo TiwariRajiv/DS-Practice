@@ -1,0 +1,30 @@
+DFS starting from source
+class Solution {
+
+    private void dfs(int i, int j, int n, int m, int sColour, int[][] image, int color, boolean[][] visited) {
+        if (i < 0 || i >= n || j < 0 || j >= m || visited[i][j] || image[i][j] != sColour) {
+            return;
+        }
+        visited[i][j] = true;
+        image[i][j] = color;
+        
+        dfs(i+1, j, n, m, sColour, image, color, visited);
+        dfs(i-1, j, n, m, sColour, image, color, visited);
+        dfs(i, j+1, n, m, sColour, image, color, visited);
+        dfs(i, j-1, n, m, sColour, image, color, visited);
+    }
+
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int n = image.length;
+        int m = image[0].length;
+
+        boolean[][] visited = new boolean[n][m];
+        for (int i=0; i<n; i++) {
+            Arrays.fill(visited[i], false);
+        }
+
+        int sColour = image[sr][sc];
+        dfs(sr, sc, n, m, sColour, image, color, visited);
+        return image;
+    }
+}
