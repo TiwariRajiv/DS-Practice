@@ -1,0 +1,58 @@
+class Pair {
+    public int first;
+    public int second;
+    
+    Pair(final int first, final int second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+
+class Solution
+{
+    
+    private static final int[] dx = {-1, 0, 1, 0};
+    private static final int[] dy = {0, -1, 0, 1};
+    
+    //Function to find distance of nearest 1 in the grid for each cell.
+    public int[][] nearest(int[][] grid)
+    {
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int[][] result = new int[m][n];
+        for (int i=0; i<m; i++) {
+            Arrays.fill(visited[i], false);
+            Arrays.fill(result[i], Integer.MAX_VALUE);
+        }
+        
+        Queue<Pair> q = new LinkedList<>();
+        for (int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                if (grid[i][j] == 1) {
+                    visited[i][j] = true;
+                    q.add(new Pair(i*n+j, 0));
+                    result[i][j] = 0;
+                }
+            }
+        }
+        
+        while (!q.isEmpty()) {
+            int i = q.peek().first/n;
+            int j = q.peek().first%n;
+            int dist = q.peek().second;
+            q.poll();
+            for (int k = 0; k<4; k++) {
+                int adjx = i + dx[k];
+                int adjy = j + dy[k];
+                if (adjx>=0 && adjy>=0 && adjx<m && adjy<n && !visited[adjx][adjy] && grid[adjx][adjy] == 0) {
+                    visited[adjx][adjy] = true;
+                    result[adjx][adjy] = dist + 1;
+                    q.add(new Pair(adjx*n+adjy, dist + 1));
+                }
+            }
+        }
+        
+        return result;
+    }
+}
