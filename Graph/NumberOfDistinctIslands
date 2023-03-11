@@ -1,0 +1,35 @@
+class Solution {
+    
+    private static final int[] dx = {-1, 0, 1, 0};
+    private static final int[] dy = {0, -1, 0, 1};
+    
+    private void dfs(int i, int j, int px, int py, int m, int n, int[][] grid, boolean[][] visited, List<String> list) {
+        visited[i][j] = true;
+        String value = String.valueOf(i-px)+String.valueOf(j-py);
+        list.add(value);
+        for (int k=0; k<4; k++) {
+            int x = i + dx[k];
+            int y = j + dy[k];
+            if (x>=0 && y>=0 && x<m && y<n && !visited[x][y] && grid[x][y] == 1) {
+                dfs(x, y, px, py, m, n, grid, visited, list);
+            }
+        }
+    }
+
+    int countDistinctIslands(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n]; 
+        Set<List<String>> set = new HashSet<>();
+        for (int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                if (!visited[i][j] && grid[i][j] == 1) {
+                    List<String> list = new ArrayList<>();
+                    dfs(i, j, i, j, m, n, grid, visited, list);
+                    set.add(list);
+                }
+            }
+        }
+        return set.size();
+    }
+}
